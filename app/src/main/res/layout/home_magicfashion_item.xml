@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp_312"
+    android:layout_height="@dimen/dp_118"
+    android:padding="@dimen/dp_10"
+    android:layout_marginTop="@dimen/dp_10"
+    android:layout_marginLeft="@dimen/dp_25"
+    android:orientation="horizontal"
+    android:background="@drawable/home_rxxp_shape"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    >
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/home_magicfashion_image"
+        android:layout_width="@dimen/dp_85"
+        android:layout_height="@dimen/dp_98" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_98"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/home_magicfashion_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:textSize="@dimen/sp_12"
+            android:textColor="#999999"
+            />
+        <TextView
+            android:id="@+id/home_magicfashion_price"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_18"
+            android:layout_marginTop="20sp"
+            android:textColor="#f00"
+            android:textSize="@dimen/sp_14"
+            android:textStyle="bold"
+            android:text="1111"
+            />
+    </LinearLayout>
+</LinearLayout>
