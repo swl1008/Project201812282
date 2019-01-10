@@ -7,4 +7,6 @@ public interface Ipresenter {
     void startRequestPost(String url, Map<String, String> params, Class clazz);
     //get
     void startRequestGet(String url,Class clazz);
+    //put
+    void startRequestPut(String url, Map<String, String> params, Class clazz);
 }

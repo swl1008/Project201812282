@@ -50,8 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HomeFragment extends Fragment implements Iview {
-
+public class HomeFragment extends BaseFragment implements Iview {
 
     //图片
     @BindView(R.id.image_home_search)
@@ -86,16 +85,19 @@ public class HomeFragment extends Fragment implements Iview {
     XBanner home_xbanner;
     private PresenterImpl presenter;
     //首页展示适配器
+    //热销新品
     private HotProductAdapter hotProductAdapter;
+    //魔力时尚
     private MagicFashionAdapter magicFashionAdapter;
+    //品质生活
     private QualityLifeAdapter qualityLifeAdapter;
     //搜索适配器
     private HomeSearchAdapter homeSearchAdapter;
+    //轮播图适配器
     private XBanner.XBannerAdapter xBannerAdapter;
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home,container,false);
+    public void initData(View view) {
         ButterKnife.bind(this,view);
         presenter = new PresenterImpl(this);
         initData();
@@ -107,8 +109,13 @@ public class HomeFragment extends Fragment implements Iview {
         initQualityLifeView();
         //搜索
         initHomeSearchView();
-        return view;
     }
+
+    @Override
+    public int getContent() {
+        return R.layout.fragment_home;
+    }
+
     //放大镜搜索的点击事件
     @OnClick(R.id.image_home_search)
     public void onImageSearchClickListener(){

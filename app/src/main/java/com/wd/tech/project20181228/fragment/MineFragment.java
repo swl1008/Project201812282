@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 
 import com.wd.tech.project20181228.R;
 
-public class MineFragment extends Fragment {
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mine,container,false);
+public class MineFragment extends BaseFragment {
 
-        return view;
+    @Override
+    public void initData(View view) {
+
+    }
+
+    @Override
+    public int getContent() {
+        return R.layout.fragment_mine;
     }
 }

@@ -18,25 +18,29 @@ import com.wd.tech.project20181228.fragment.HomeFragment;
 import com.wd.tech.project20181228.fragment.MineFragment;
 import com.wd.tech.project20181228.fragment.OrderFragment;
 
-public class SuccessActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private ViewPager success_viewPager;
-    private RadioGroup success_group;
-    private RadioButton tabhomebottomshouye,tabhomebottomquanzi,tabhomebottomche,
-    tabhomebottomdingdan,tabhomebottomwod;
+public class SuccessActivity extends BaseActivity {
+    @BindView(R.id.success_viewpager)
+    ViewPager success_viewPager;
+    @BindView(R.id.success_group)
+    RadioGroup success_group;
+    @BindView(R.id.tab_home_bottom_shouye)
+    RadioButton tabhomebottomshouye;
+    @BindView(R.id.tab_home_bottom_quanzi)
+    RadioButton tabhomebottomquanzi;
+    @BindView(R.id.tab_home_bottom_che)
+    RadioButton tabhomebottomche;
+    @BindView(R.id.tab_home_bottom_dingdan)
+    RadioButton tabhomebottomdingdan;
+    @BindView(R.id.tab_home_bottom_wode)
+    RadioButton tabhomebottomwod;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_success);
+    public void initData() {
+        ButterKnife.bind(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        success_viewPager = findViewById(R.id.success_viewpager);
-        success_group = findViewById(R.id.success_group);
-        tabhomebottomshouye = findViewById(R.id.tab_home_bottom_shouye);
-        tabhomebottomquanzi = findViewById(R.id.tab_home_bottom_quanzi);
-        tabhomebottomche = findViewById(R.id.tab_home_bottom_che);
-        tabhomebottomdingdan = findViewById(R.id.tab_home_bottom_dingdan);
-        tabhomebottomwod = findViewById(R.id.tab_home_bottom_wode);
 
         success_viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -143,5 +147,10 @@ public class SuccessActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public int getContent() {
+        return R.layout.activity_success;
     }
 }

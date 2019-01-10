@@ -15,4 +15,8 @@ public class Apis {
     public static final String URL_HOME_BANNER = "commodity/v1/bannerShow";
     //商品详情
     public static final String URL_PRODUCT_DETAILS = "commodity/v1/findCommodityDetailsById?commodityId=%s";
+    //添加购物车
+    public static final String URL_ADD_CAR = "order/verify/v1/syncShoppingCart";
+    //展示购物车
+    public static final String URL_SHOW_CAR = "order/verify/v1/findShoppingCart";
 }

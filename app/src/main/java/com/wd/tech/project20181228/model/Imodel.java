@@ -9,4 +9,6 @@ public interface Imodel {
     void requestDataPost(String url, Map<String, String> params, Class clazz, MyCallBack callBack);
     //get请求
     void requestDataGet(String url,Class clazz,MyCallBack callBack);
+    //put请求
+    void requestDataPut(String url, Map<String, String> params, Class clazz, MyCallBack callBack);
 }

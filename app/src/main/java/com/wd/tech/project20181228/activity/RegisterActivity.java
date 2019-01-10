@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class RegisterActivity extends AppCompatActivity implements Iview {
+public class RegisterActivity extends BaseActivity implements Iview {
 
     @BindView(R.id.register_edit_phone)
     EditText register_edit_phone;
@@ -40,9 +40,7 @@ public class RegisterActivity extends AppCompatActivity implements Iview {
     private PresenterImpl presenter;
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+    public void initData() {
         ButterKnife.bind(this);
         presenter = new PresenterImpl(this);
 
@@ -59,9 +57,12 @@ public class RegisterActivity extends AppCompatActivity implements Iview {
                 return false;
             }
         });
-
     }
 
+    @Override
+    public int getContent() {
+        return R.layout.activity_register;
+    }
 
 
     @OnClick({R.id.btn_register,R.id.register_had})

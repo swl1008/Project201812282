@@ -1,31 +1,42 @@
 package com.wd.tech.project20181228.network;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
+
+import com.wd.tech.project20181228.app.BaseApplication;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.http.QueryMap;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class RetrofitManager {
     private final String BASE_URL = "http://172.17.8.100/small/";
-    private static RetrofitManager mRetrofitManager;
+    private static RetrofitManager instance;
 
     public static synchronized RetrofitManager getInstance() {
-        if (mRetrofitManager == null) {
-            mRetrofitManager = new RetrofitManager();
+        if (instance == null) {
+            instance = new RetrofitManager();
         }
-        return mRetrofitManager;
+        return instance;
     }
-    private BaseApis mBaseApis;
+    private BaseApis baseApis;
 
     private RetrofitManager() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -35,7 +46,31 @@ public class RetrofitManager {
         builder.connectTimeout(15, TimeUnit.SECONDS);
         builder.readTimeout(15, TimeUnit.SECONDS);
         builder.writeTimeout(15, TimeUnit.SECONDS);
-        builder.addInterceptor(interceptor);
+        builder.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                //拿到请求
+                Request original = chain.request();
+                //取出保存的userId,sessionId
+                SharedPreferences swl = BaseApplication.getApplication().getSharedPreferences("swl", Context.MODE_PRIVATE);
+                String sessionId = swl.getString("sessionId", "");
+                String userId = swl.getString("userId", "");
+
+                //重新构造请求
+                Request.Builder newBuilder = original.newBuilder();
+                //把原来请求的原样参数放进去
+                newBuilder.method(original.method(),original.body());
+                //添加特殊的userId,sessionId
+                if (!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(sessionId)){
+                    newBuilder.addHeader("userId",userId);
+                    newBuilder.addHeader("sessionId",sessionId);
+                }
+                //打包
+                Request request = newBuilder.build();
+
+                return chain.proceed(request);
+            }
+        });
         builder.retryOnConnectionFailure(true);
         OkHttpClient client = builder.build();
 
@@ -44,7 +79,7 @@ public class RetrofitManager {
                 .baseUrl(BASE_URL)
                 .client(client)
                 .build();
-        mBaseApis = retrofit.create(BaseApis.class);
+        baseApis = retrofit.create(BaseApis.class);
     }
 
     /**
@@ -62,12 +97,13 @@ public class RetrofitManager {
     }
 
 
+
     /**
      * get请求
      */
     public void get(String url,HttpListener listener) {
 
-        mBaseApis.get(url)
+        baseApis.get(url)
                 //后台执行在哪个线程中
                 .subscribeOn(Schedulers.io())
                 //最终完成后执行在哪个线程
@@ -78,6 +114,9 @@ public class RetrofitManager {
 
     }
 
+
+
+
     /**
      * 表单post请求
      */
@@ -86,7 +125,7 @@ public class RetrofitManager {
             map = new HashMap<>();
         }
 
-        mBaseApis.postFormBody(url, map)
+        baseApis.postFormBody(url, map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getObserver(listener));
@@ -100,12 +139,27 @@ public class RetrofitManager {
         if (map == null) {
             map = new HashMap<>();
         }
-        mBaseApis.post(url, map)
+        baseApis.post(url, map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getObserver(listener));
 
     }
+
+    /**
+     * put请求
+     */
+    public void put(String url, Map<String, String> map,HttpListener listener) {
+        if (map == null) {
+            map = new HashMap<>();
+        }
+        baseApis.put(url, map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getObserver(listener));
+
+    }
+
 
     public Observer getObserver(final HttpListener listener){
 

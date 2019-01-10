@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 
 import com.wd.tech.project20181228.R;
 
-public class OrderFragment extends Fragment {
-    @Nullable
+public class OrderFragment extends BaseFragment {
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order,container,false);
+    public void initData(View view) {
 
-        return view;
+    }
+
+    @Override
+    public int getContent() {
+        return R.layout.fragment_order;
     }
 }

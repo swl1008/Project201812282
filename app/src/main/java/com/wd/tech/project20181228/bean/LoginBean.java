@@ -39,7 +39,7 @@ public class LoginBean {
         private String phone;
         private String sessionId;
         private int sex;
-        private int userId;
+        private String userId;
 
         public String getHeadPic() {
             return headPic;
@@ -81,11 +81,11 @@ public class LoginBean {
             this.sex = sex;
         }
 
-        public int getUserId() {
+        public String getUserId() {
             return userId;
         }
 
-        public void setUserId(int userId) {
+        public void setUserId(String userId) {
             this.userId = userId;
         }
     }

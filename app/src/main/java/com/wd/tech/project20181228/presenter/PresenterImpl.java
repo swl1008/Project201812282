@@ -47,6 +47,21 @@ public class PresenterImpl implements Ipresenter{
         });
     }
 
+    @Override
+    public void startRequestPut(String url, Map<String, String> params, Class clazz) {
+        model.requestDataPut(url, params, clazz, new MyCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                iview.showDataSuccess(data);
+            }
+
+            @Override
+            public void onFail(String error) {
+                iview.showDataFail(error);
+            }
+        });
+    }
+
     public void onDetach(){
         if (iview != null){
             iview = null;

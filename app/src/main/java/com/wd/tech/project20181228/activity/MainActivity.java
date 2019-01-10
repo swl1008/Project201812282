@@ -30,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements Iview {
+public class MainActivity extends BaseActivity implements Iview {
 
     @BindView(R.id.login_edit_phone)
     EditText login_edit_phone;
@@ -45,16 +45,21 @@ public class MainActivity extends AppCompatActivity implements Iview {
     private PresenterImpl presenter;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void initData() {
         ButterKnife.bind(this);
         presenter = new PresenterImpl(this);
         sharedPreferences = getSharedPreferences("swl",MODE_PRIVATE);
         editor = sharedPreferences.edit();
         checkboxCheck();
     }
+
+    @Override
+    public int getContent() {
+        return R.layout.activity_main;
+    }
+
     //记住密码的判断
     private void checkboxCheck() {
         //取出记住密码的状态值进行判断
@@ -84,6 +89,19 @@ public class MainActivity extends AppCompatActivity implements Iview {
                 break;
             //登录
             case R.id.btn_login:
+                Map<String,String> map = new HashMap<>();
+                map.put("phone",login_edit_phone.getText().toString());
+                map.put("pwd",login_edit_password.getText().toString());
+                presenter.startRequestPost(Apis.URL_LOGIN_POST,map,LoginBean.class);
+                break;
+        }
+    }
+
+    @Override
+    public void showDataSuccess(Object data) {
+        if (data instanceof LoginBean){
+            LoginBean loginBean = (LoginBean) data;
+            if (loginBean.getMessage().equals("登录成功")){
                 //判断记住密码框是否选中
                 if (login_checkbox_remember.isChecked()){
                     //将输入框的值放入sharedprefences中
@@ -98,21 +116,10 @@ public class MainActivity extends AppCompatActivity implements Iview {
                     editor.clear();
                     editor.commit();
                 }
-                Map<String,String> map = new HashMap<>();
-                map.put("phone",login_edit_phone.getText().toString());
-                map.put("pwd",login_edit_password.getText().toString());
-                presenter.startRequestPost(Apis.URL_LOGIN_POST,map,LoginBean.class);
-                break;
-        }
-    }
-
-    @Override
-    public void showDataSuccess(Object data) {
-        if (data instanceof LoginBean){
-            LoginBean loginBean = (LoginBean) data;
-            if (loginBean.getMessage().equals("登录成功")){
                 String sessionId = loginBean.getResult().getSessionId();
+                String userId = loginBean.getResult().getUserId();
                 editor.putString("sessionId",sessionId);
+                editor.putString("userId",userId);
                 editor.commit();
                 startActivity(new Intent(MainActivity.this,SuccessActivity.class));
                 finish();

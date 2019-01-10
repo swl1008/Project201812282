@@ -20,7 +20,7 @@ import com.wd.tech.project20181228.view.Iview;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CircleFragment extends Fragment implements Iview {
+public class CircleFragment extends BaseFragment implements Iview {
 
 
     @BindView(R.id.circle_recycle)
@@ -28,15 +28,17 @@ public class CircleFragment extends Fragment implements Iview {
     private CircleAdapter circleAdapter;
     private PresenterImpl presenter;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_circle,container,false);
+    public void initData(View view) {
         ButterKnife.bind(this,view);
         presenter = new PresenterImpl(this);
         initCircleView(view);
         getCircleData();
-        return view;
+    }
+
+    @Override
+    public int getContent() {
+        return R.layout.fragment_circle;
     }
 
     public void initCircleView(View view){
